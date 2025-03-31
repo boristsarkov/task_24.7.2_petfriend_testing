@@ -54,3 +54,9 @@ def test_create_pet_simple(name='Jude', animal_type='beawer', age=17):
     status, result = pf.create_pet_simple(auth_key, name, animal_type, age)
     assert status == 200
     assert len(result) > 0
+
+def test_get_api_key_for_invalid_user(email=valid_email, password=valid_password):
+    """Проверяем что запрос api ключа возвращает статус 200 и содержит сам ключ"""
+    status, result = pf.get_api_key(email, password)
+    assert status == 200
+    assert 'key' in result
