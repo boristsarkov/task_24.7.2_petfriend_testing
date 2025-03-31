@@ -27,8 +27,14 @@ def test_del_of_pet(pet_id='4c4aab48-66e1-438d-ac9b-891f12e604cb'):
     assert status == 200
     assert len(result) == 0
 
-def test_update_of_pet(pet_id='ddeef448-e723-4d10-99c1-5f21c5067f83', name='POOOOP', animal_type='dog', age=99):
+def test_update_of_pet(pet_id='723a0ae0-a41f-4de7-9a5f-9b3ec7b8ed8b', name='POOOOP', animal_type='dog', age=99):
     _, auth_key = pf.get_api_key(valid_email, valid_password)
     status, result = pf.update_pet(auth_key, pet_id, name, animal_type, age)
     assert status == 200
     assert result['name'] == name
+
+def test_add_photo_of_pet(pet_id='723a0ae0-a41f-4de7-9a5f-9b3ec7b8ed8b', pet_photo='images/1.jpg'):
+    _, auth_key = pf.get_api_key(valid_email, valid_password)
+    status, result = pf.add_photo_of_pets(auth_key, pet_photo, pet_id)
+    assert status == 200
+    assert len(result['pet_photo']) > 0
