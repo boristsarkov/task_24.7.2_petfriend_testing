@@ -86,3 +86,19 @@ class PetFriends:
         except:
             result = res.text
         return status, result
+
+    def create_pet_simple(self, auth_key, name, animal_type, age):
+        data = {
+            'name': name,
+            'animal_type': animal_type,
+            'age': age,
+        }
+        headers = {'auth_key': auth_key['key']}
+        res = requests.post(self.base_url + 'api/create_pet_simple', headers=headers, data=data)
+        status = res.status_code
+        result = ''
+        try:
+            result = res.json()
+        except:
+            result = res.text
+        return status, result
