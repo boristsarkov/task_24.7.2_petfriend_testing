@@ -30,3 +30,20 @@ class PetFriends:
             result = res.text
         return status, result
 
+    def add_new_pet(self, auth_key, pet_photo, name, animal_type, age):
+        data = {
+            'name': name,
+            'animal_type': animal_type,
+            'age': age,
+        }
+        headers = {'auth_key': auth_key['key']}
+        file = {'pet_photo': (pet_photo, open(pet_photo, 'rb'), 'images/1.jpg')}
+
+        res = requests.post(self.base_url + 'api/pets', headers=headers, data=data, files=file)
+        status = res.status_code
+        result = ''
+        try:
+            result = res.json()
+        except:
+            result = res.text
+        return status, result
