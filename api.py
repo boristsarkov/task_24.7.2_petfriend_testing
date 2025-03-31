@@ -78,7 +78,7 @@ class PetFriends:
     def add_photo_of_pets(self, auth_key, pet_id, pet_photo):
         headers = {'auth_key': auth_key['key']}
         file = {'pet_photo': (pet_photo, open(pet_photo, 'rb'), 'images/1.jpg')}
-        res = requests.post(self.base_url + '/api/pets/set_photo/{pet_id}'+ pet_id, headers=headers, files=file)
+        res = requests.post(self.base_url + '/api/pets/set_photo/{pet_id}' + pet_id, headers=headers, files=file)
         status = res.status_code
         result = ''
         try:
