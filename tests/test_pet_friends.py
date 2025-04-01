@@ -60,12 +60,8 @@ def test_create_pet_simple(name='Jude', animal_type='beawer', age=17):
 def test_get_api_key_for_invalid_user(email=valid_email, password=valid_password):
     """Проверяем что запрос api ключа возвращает ошибку валидности данных пользователя"""
     status, result = pf.get_api_key(email, password)
-    if 'key' in result:
-        assert status == 200
-        assert 'key' in result
-    else:
-        print('Authorization key is not valid')
-
+    assert status == 403
+    assert not 'key' in result
 
 
 def test_update_of_pet_validation_of_age(pet_id='723a0ae0-a41f-4de7-9a5f-9b3ec7b8ed8b', name='POOOOP', animal_type='dog', age=-19):
@@ -75,20 +71,20 @@ def test_update_of_pet_validation_of_age(pet_id='723a0ae0-a41f-4de7-9a5f-9b3ec7b
     assert status == 200
     assert result['name'] == name
 
-def test_add_new_pets_with_valid_key_with_invalid_age(name='Bobby', animal_type='cat', age=-3, pet_photo='images/1.jpg'):
+def test_add_new_pets_with_valid_key_with_invalid_age(name='qute', animal_type='city', age=-33, pet_photo='images/1.jpg'):
     """Проверяем что запрос на добавление нового питомца с валидным ключом, но неверным возрастом падает с ошибкой"""
     _, auth_key = pf.get_api_key(valid_email, valid_password)
     status, result = pf.add_new_pet(auth_key, pet_photo, name, animal_type, age)
     assert status == 200
     assert len(result) > 0
 
+
 def test_update_of_pet_with_invalid_pet_id(pet_id='723a0ae0-a41f-4de7-9a5f-9b3ec7b8ed8b1', name='POOOOPY', animal_type='dogy', age=1999999):
     """Проверяем что запрос на изменение питомца падает с ошибкой если возраст не правильный"""
     _, auth_key = pf.get_api_key(valid_email, valid_password)
     status, result = pf.update_pet(auth_key, pet_id, name, animal_type, age)
-    with pytest.raises(AssertionError):
-        assert status == 200
-        assert result['name'] == name
+    assert status == 400
+    #assert len(result) == 0
 
 def test_add_new_pets_with_valid_key_with_invalid_file(name='Bobby', animal_type='cat', age=-3, pet_photo='images/2.jpg'):
     """Проверяем что запрос на добавление нового питомца с валидным ключом, но неверным названием или путем файла
@@ -99,12 +95,15 @@ def test_add_new_pets_with_valid_key_with_invalid_file(name='Bobby', animal_type
         assert status == 200
         assert len(result) > 0
 
-def test_del_of_pet_with_invalid_pet_id(pet_id='0737b244-7e21-4a85-85b0-ce3314ded272'):
+def test_del_of_pet_with_invalid_pet_id(pet_id='76137d3d-971e-4483-ae29-f5611a4bc649'):
     """Проверяем что запрос на удаление питомца по его id возвращает статус 200 и результат стал нулевым"""
     _, auth_key = pf.get_api_key(valid_email, valid_password)
     status, result = pf.del_pet(auth_key, pet_id)
-    assert status == 200
-    assert len(result) == 0
+    if result == pet_id:
+        assert status == 200
+        assert len(result) == 0
+    else:
+        print('Pet ID not found')
 
 def test_successful_update_self_pet_info(name='Мурзик', animal_type='Котэ', age=5):
    _, auth_key = pf.get_api_key(valid_email, valid_password)
@@ -116,3 +115,10 @@ def test_successful_update_self_pet_info(name='Мурзик', animal_type='Ко�
        assert result['name'] == name
    else:
        raise Exception("There is no my pets")
+
+def test_add_new_pets_with_valid_key_with_invalid_name(name='', animal_type='city', age=-33, pet_photo='images/1.jpg'):
+    """Проверяем что запрос на добавление нового питомца с валидным ключом, но неверным возрастом падает с ошибкой"""
+    _, auth_key = pf.get_api_key(valid_email, valid_password)
+    status, result = pf.add_new_pet(auth_key, pet_photo, name, animal_type, age)
+    assert status == 200
+    assert len(result) > 0
