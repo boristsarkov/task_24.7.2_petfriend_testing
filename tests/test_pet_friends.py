@@ -106,14 +106,14 @@ def test_del_of_pet_with_invalid_pet_id(pet_id='76137d3d-971e-4483-ae29-f5611a4b
         print('Pet ID not found')
 
 def test_successful_update_self_pet_info(name='Мурзик', animal_type='Котэ', age=5):
-   _, auth_key = pf.get_api_key(valid_email, valid_password)
-   _, my_pets = pf.get_list_of_pets(auth_key, "my_pets")
-
-   if len(my_pets['pets']) > 0:
+    """Проверяем что возращается статус код 200 при проверке прошли ли изменения в питомце"""
+    _, auth_key = pf.get_api_key(valid_email, valid_password)
+    _, my_pets = pf.get_list_of_pets(auth_key, "my_pets")
+    if len(my_pets['pets']) > 0:
        status, result = pf.update_pet(auth_key, my_pets['pets'][0]['id'], name, animal_type, age)
        assert status == 200
        assert result['name'] == name
-   else:
+    else:
        raise Exception("There is no my pets")
 
 def test_add_new_pets_with_valid_key_with_invalid_name(name='', animal_type='city', age=33, pet_photo='images/1.jpg'):
@@ -122,3 +122,10 @@ def test_add_new_pets_with_valid_key_with_invalid_name(name='', animal_type='cit
     status, result = pf.add_new_pet(auth_key, pet_photo, name, animal_type, age)
     assert status == 200
     assert len(result) > 0
+
+def test_get_all_pets_with_invalid_key(filter=''):
+    """Проверяем что запрос на получение всех питомцев возвращает статус 403 при неправильном авторизационном ключе"""
+    _, auth_key = pf.get_api_key(valid_email, valid_password)
+    auth_key['key'] = '1'
+    status, result = pf.get_list_of_pets(auth_key, filter)
+    assert status == 403
