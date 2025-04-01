@@ -1,3 +1,5 @@
+import pytest
+
 from api import PetFriends
 
 from settings import valid_email, valid_password
@@ -56,7 +58,8 @@ def test_create_pet_simple(name='Jude', animal_type='beawer', age=17):
     assert len(result) > 0
 
 def test_get_api_key_for_invalid_user(email=valid_email, password=valid_password):
-    """Проверяем что запрос api ключа возвращает статус 200 и содержит сам ключ"""
+    """Проверяем что запрос api ключа возвращает ошибку валидности данных пользователя"""
     status, result = pf.get_api_key(email, password)
-    assert status == 200
-    assert 'key' in result
+    with pytest.raises(AssertionError):
+        assert status == 200
+        assert 'key' in result
