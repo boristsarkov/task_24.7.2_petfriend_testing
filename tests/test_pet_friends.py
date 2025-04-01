@@ -84,7 +84,7 @@ def test_update_of_pet_with_invalid_pet_id(pet_id='723a0ae0-a41f-4de7-9a5f-9b3ec
     _, auth_key = pf.get_api_key(valid_email, valid_password)
     status, result = pf.update_pet(auth_key, pet_id, name, animal_type, age)
     assert status == 400
-    #assert len(result) == 0
+
 
 def test_add_new_pets_with_valid_key_with_invalid_file(name='Bobby', animal_type='cat', age=-3, pet_photo='images/2.jpg'):
     """Проверяем что запрос на добавление нового питомца с валидным ключом, но неверным названием или путем файла
@@ -116,8 +116,8 @@ def test_successful_update_self_pet_info(name='Мурзик', animal_type='Ко�
    else:
        raise Exception("There is no my pets")
 
-def test_add_new_pets_with_valid_key_with_invalid_name(name='', animal_type='city', age=-33, pet_photo='images/1.jpg'):
-    """Проверяем что запрос на добавление нового питомца с валидным ключом, но неверным возрастом падает с ошибкой"""
+def test_add_new_pets_with_valid_key_with_invalid_name(name='', animal_type='city', age=33, pet_photo='images/1.jpg'):
+    """Проверяем что запрос на добавление нового питомца с валидным ключом, но неверным именем падает с ошибкой"""
     _, auth_key = pf.get_api_key(valid_email, valid_password)
     status, result = pf.add_new_pet(auth_key, pet_photo, name, animal_type, age)
     assert status == 200
